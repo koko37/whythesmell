@@ -1,11 +1,3 @@
-header {
-  padding: 32px;
-  .nav-result {
-    color: white;
-    font-size: 18px;
-  }
-}
-
 .dashboard {
   height: 100vh;
   .title {
@@ -60,10 +52,6 @@ header {
     width: 768px;
     text-align: center;
   }
-}
-
-button, button:focus{
-  outline: none;
 }
 
 .modal {

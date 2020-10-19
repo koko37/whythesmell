@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import SmellRate from './SmellRate'
+import SmellRate from '../components/SmellRate'
 import imgLeftArrow from '../assets/imgs/gt.png'
 import imgGood from '../assets/imgs/good.png'
 import imgBad from '../assets/imgs/bad.png'
@@ -18,7 +18,7 @@ const Dashboard = () => {
   return (
     <div className="dashboard">
       <header className="d-flex flex-row justify-content-end">
-        <Link to="/results" className="nav-result">View current results <img src={imgLeftArrow} alt="arrow" /></Link>
+        <Link to="/graph" className="nav-result d-flex align-items-center">View current results &nbsp;<img src={imgLeftArrow} alt="arrow" /></Link>
       </header>
 
       <div className="title w-100 text-center">

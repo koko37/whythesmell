@@ -1,3 +1,15 @@
 body {
   background-color: $primary-color;
 }
+
+header {
+  padding: 32px;
+  .nav-result {
+    color: white;
+    font-size: 18px;
+  }
+}
+
+button, button:focus{
+  outline: none;
+}
