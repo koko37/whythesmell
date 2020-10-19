@@ -1,0 +1,98 @@
+header {
+  padding: 32px;
+  .nav-result {
+    color: white;
+    font-size: 18px;
+  }
+}
+
+.dashboard {
+  height: 100vh;
+  .title {
+    margin-top: 24px;
+    margin-bottom: 0px;
+    h1 {
+      font-size: 45px;
+      margin-bottom: 0px;
+    }
+  }
+  .buttons-wrapper {
+    margin-left: auto;
+    margin-right: auto;
+    padding-bottom: 48px;
+    padding-top: 48px;
+    border-bottom: 1px solid white;
+    width: 768px;
+
+    .dashboard__button {
+      width: 365px;
+      height: 238px;
+      font-size: 63px;
+      border-radius: 20px;
+      border: none;
+  
+      &.pee {
+        color: $primary-color;
+        background-color: #98d4e5;
+      }
+  
+      &.poo {
+        color: white;
+        background-color: #cd8a4e;
+      }
+    }
+  }
+
+  h6.smell-rate-title {
+    margin-top: 40px;
+    margin-bottom: 24px;
+    font-size: 18px;
+    text-align: center;
+    color: white;
+    span.hint {
+      color: #7b8084;
+    }
+  }
+
+  .smell-wrapper {
+    margin-left: 0;
+    margin-right: 0;
+    width: 768px;
+    text-align: center;
+  }
+}
+
+button, button:focus{
+  outline: none;
+}
+
+.modal {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: $primary-color;
+  opacity: 0.75;
+  z-index: 50;
+  display: flex;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 500ms;
+
+  &__content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+  }
+
+  &__title{
+    margin-top: 54px;
+    font-size: 45px;
+  }
+
+  &__comment {
+    margin-top: 54px;
+    font-size: 45px;
+  }
+}
