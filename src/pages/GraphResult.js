@@ -3,9 +3,11 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import Loader from 'react-loader-spinner'
 import Calendar from 'react-calendar'
+import SmellGraph from '../components/SmellGraph'
 
 import { setCurrentDate } from '../actions/dateActions'
 import { queryDataByTimestamp } from '../utils/firebase'
+import { DISPLAY_WEEKLY, DISPLAY_DAILY, MONTHLY_CALENDAR, DAILY_CALENDAR } from '../utils/constants'
 
 import 'react-calendar/dist/Calendar.css'
 import imgRightArrow from '../assets/imgs/lt.png'
@@ -13,11 +15,6 @@ import imgGood from '../assets/imgs/good.png'
 import imgBad from '../assets/imgs/bad.png'
 import imgLA from '../assets/imgs/la.png'
 import imgRA from '../assets/imgs/ra.png'
-
-const DISPLAY_WEEKLY = 1;
-const DISPLAY_DAILY = 2;
-const MONTHLY_CALENDAR = 3;
-const DAILY_CALENDAR = 4;
 
 const mapStateToProps = (state) => ({
   weekStart: state.date.weekStart,
@@ -37,6 +34,10 @@ const GraphResult = ({currentDate, weekStart, weekEnd, dateStart, dateEnd, setDa
   const [calendarMode, setCalendarMode] = useState('month')
   const [loading, setLoading] = useState(false)
   const [connError, setConError] = useState(false)
+  
+  const [peeData, setPeeData] = useState([])
+  const [pooData, setPooData] = useState([])
+  const [smellData, setSmellData] = useState([])
 
   useEffect(() => {
     console.log("query data start ...")
@@ -54,10 +55,11 @@ const GraphResult = ({currentDate, weekStart, weekEnd, dateStart, dateEnd, setDa
           setConError(true)
           return
         }
-        console.log("loaded data from firestore")
-        results.forEach((item) => {
-          console.log(item.id, item.data().value, item.data().flag)
-        })
+
+        setPeeData(results.filter((item) => item.flag === 'pee'))
+        setPooData(results.filter((item) => item.flag === 'poo'))
+        setSmellData(results.filter((item) => item.flag === 'smell'))
+        console.log("update graph data")
       })
   }, [currentDate, dateStart, dateEnd, weekStart, weekEnd, displayMode])
 
@@ -191,7 +193,14 @@ const GraphResult = ({currentDate, weekStart, weekEnd, dateStart, dateEnd, setDa
         </div>
         
         <div className="graph">
-          lorem ipsum
+          <SmellGraph
+            peeData={peeData}
+            pooData={pooData}
+            smellData={smellData}
+            startDate={displayMode === DISPLAY_WEEKLY ? weekStart : dateStart}
+            endDate={displayMode === DISPLAY_WEEKLY ? weekEnd : dateEnd}
+            graphMode={displayMode}
+          />
         </div>
 
         <div className="graph-legend-wrapper d-flex flex-column justify-content-around align-items-start">
