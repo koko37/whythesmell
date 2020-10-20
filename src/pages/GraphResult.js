@@ -31,6 +31,9 @@ const GraphResult = ({currentDate, weekStart, weekEnd, setDate}) => {
   const [showCalendar, setShowCalendar] = useState(false)
   const [calendarMode, setCalendarMode] = useState('month')
 
+  /**
+   * Display mode
+   */
   const onWeeklyMode = () => {
     setDisplayMode(DISPLAY_WEEKLY)
   }
@@ -39,6 +42,9 @@ const GraphResult = ({currentDate, weekStart, weekEnd, setDate}) => {
     setDisplayMode(DISPLAY_DAILY)
   }
 
+  /**
+   * Calendar related methods
+   */
   const onOpenCalendar = (calendarMode) => {
     console.log("calendarMode", calendarMode);
     if(calendarMode === MONTHLY_CALENDAR) {

@@ -1,4 +1,4 @@
-import { getFirstDayOfWeek, getEndDayOfWeek} from '../utils'
+import { getFirstDayOfWeek, getEndDayOfWeek} from '../utils/utils'
 import { SET_CURRENT_DATE } from '../actions/dateActions'
 
 export const initialState = {

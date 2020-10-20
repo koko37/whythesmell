@@ -50,3 +50,18 @@ button.navigate {
     display: flex;
   }
 }
+
+.spinner {
+  margin-left: 1rem;
+}
+
+.error {
+  color: white;
+  background-color: #f44;
+  padding: .5rem;
+  border-radius: 10%;
+  text-transform: uppercase;
+  margin-left: .5rem;
+  font-weight: 700;
+  font-size: 12px;
+}
