@@ -10,18 +10,22 @@
   .graph-wrapper {
     margin-top: 2rem;
     
-    .x-axis-wrapper{
+    .y-axis-wrapper{
       width: 160px;
-      .x-axis-label {
+      .y-axis-label {
         color: white;
         font-size: 21px;
       }
-      .x-axis-img {
+      .y-axis-img {
         padding-left: .25rem;
         padding-right: .25rem;
         img {
           width: 1.5rem;
           height: 1.5rem;
+        }
+
+        &--good {
+          margin-bottom: 2rem;
         }
       }
     }

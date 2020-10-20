@@ -51,7 +51,6 @@ export function queryDataByTimestamp(collectionName, startTs, endTs, callback) {
     .orderBy('createdAt')
     .get()
     .then((querySnapshot) => {
-      console.log("success to query data by timestamp")
       querySnapshot.forEach((doc) => {
         results.push(doc.data())
       })

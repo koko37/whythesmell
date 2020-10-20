@@ -29,7 +29,7 @@ const mapDispatchToProps = (dispatch) => ({
 })
 
 const GraphResult = ({currentDate, weekStart, weekEnd, dateStart, dateEnd, setDate}) => {
-  const [displayMode, setDisplayMode] = useState(DISPLAY_WEEKLY)
+  const [displayMode, setDisplayMode] = useState(DISPLAY_DAILY)
   const [showCalendar, setShowCalendar] = useState(false)
   const [calendarMode, setCalendarMode] = useState('month')
   const [loading, setLoading] = useState(false)
@@ -40,7 +40,6 @@ const GraphResult = ({currentDate, weekStart, weekEnd, dateStart, dateEnd, setDa
   const [smellData, setSmellData] = useState([])
 
   useEffect(() => {
-    console.log("query data start ...")
     setLoading(true)
 
     let beginDate = displayMode === DISPLAY_WEEKLY ? weekStart : dateStart
@@ -55,11 +54,9 @@ const GraphResult = ({currentDate, weekStart, weekEnd, dateStart, dateEnd, setDa
           setConError(true)
           return
         }
-
         setPeeData(results.filter((item) => item.flag === 'pee'))
         setPooData(results.filter((item) => item.flag === 'poo'))
         setSmellData(results.filter((item) => item.flag === 'smell'))
-        console.log("update graph data")
       })
   }, [currentDate, dateStart, dateEnd, weekStart, weekEnd, displayMode])
 
@@ -110,7 +107,6 @@ const GraphResult = ({currentDate, weekStart, weekEnd, dateStart, dateEnd, setDa
   }
 
   const onNextMonth = () => {
-    console.log("move to next month");
     let dateTemp = new Date(currentDate)
     dateTemp.setMonth(dateTemp.getMonth() + 1)
     setDate(dateTemp)
@@ -118,12 +114,10 @@ const GraphResult = ({currentDate, weekStart, weekEnd, dateStart, dateEnd, setDa
 
   const onPrevDayOrWeek = () => {
     if (displayMode === DISPLAY_WEEKLY) {
-      console.log("move to previous week");
       let dateTemp = new Date(currentDate)
       dateTemp.setDate(dateTemp.getDate() - 7)
       setDate(dateTemp)
     } else {
-      console.log("move to previous day");
       let dateTemp = new Date(currentDate)
       dateTemp.setDate(dateTemp.getDate() - 1)
       setDate(dateTemp)
@@ -132,12 +126,10 @@ const GraphResult = ({currentDate, weekStart, weekEnd, dateStart, dateEnd, setDa
 
   const onNextDayOrWeek = () => {
     if (displayMode === DISPLAY_WEEKLY) {
-      console.log("move to next week");
       let dateTemp = new Date(currentDate)
       dateTemp.setDate(dateTemp.getDate() + 7)
       setDate(dateTemp)
     } else {
-      console.log("move to next day");
       let dateTemp = new Date(currentDate)
       dateTemp.setDate(dateTemp.getDate() + 1)
       setDate(dateTemp)
@@ -149,7 +141,6 @@ const GraphResult = ({currentDate, weekStart, weekEnd, dateStart, dateEnd, setDa
    */
   const selectedDateOrWeek = () => {
     if (displayMode === DISPLAY_DAILY) {
-      console.log("get current date: ", currentDate.toLocaleString())
       return `${currentDate.toLocaleString('default', {weekday: 'long'})} ${currentDate.toLocaleString('default', {day: 'numeric'})}`
     } 
     return `Week: ${weekStart.getDate()} - ${weekEnd.getDate()}`
@@ -184,11 +175,11 @@ const GraphResult = ({currentDate, weekStart, weekEnd, dateStart, dateEnd, setDa
       </div>
 
       <div className="graph-wrapper d-flex align-items-stretch justify-content-center">
-        <div className="x-axis-wrapper d-flex">
-          <div className="x-axis-label d-flex justify-content-center align-items-center flex-grow-1">Smell<br/>Rating</div>
-          <div className="x-axis-img d-flex flex-column justify-content-between">
+        <div className="y-axis-wrapper d-flex">
+          <div className="y-axis-label d-flex justify-content-center align-items-center flex-grow-1">Smell<br/>Rating</div>
+          <div className="y-axis-img d-flex flex-column justify-content-between">
             <img src={imgBad} alt="bad"/>
-            <img src={imgGood} alt="good" />
+            <img src={imgGood} alt="good" className="y-axis-img--good" />
           </div>
         </div>
         
