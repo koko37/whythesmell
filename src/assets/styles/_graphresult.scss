@@ -1,3 +1,105 @@
 .graph-result {
   height: 100vh;
+
+  .title {
+    span.hint {
+      color: #949ca4;
+    }
+  }
+
+  .graph-wrapper {
+    margin-top: 2rem;
+    
+    .x-axis-wrapper{
+      width: 160px;
+      .x-axis-label {
+        color: white;
+        font-size: 21px;
+      }
+      .x-axis-img {
+        padding-left: .25rem;
+        padding-right: .25rem;
+        img {
+          width: 1.5rem;
+          height: 1.5rem;
+        }
+      }
+    }
+    
+    .graph-legend-wrapper {
+      width: 160px;
+      padding-left: 1rem;
+      .graph-legend {
+        color: white;
+        font-size: 21px;
+        text-align: left;
+        height: 2.5rem;
+        width: 3.75rem;
+  
+        &__smell {
+          border-bottom: 3px solid #e94893;
+        }
+  
+        &__pee {
+          border-bottom: 3px solid #98d4e5;
+        }
+  
+        &__poo {
+          border-bottom: 3px solid #cd8a4e;
+        }
+      }
+    }
+    
+
+    .graph {
+      width: 660px;
+      height: 400px;
+      border: 1px solid white;
+    }
+  }
+
+  .query-wrapper {
+    width: 660px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 2.5rem;
+    border-top: 1px solid white;
+
+    .selector {
+      padding: .75rem;
+      font-size: 19px;
+      border-color: white;
+      border-width: 1px;
+      button {
+        color: white;
+      }
+    }
+
+    .mode-selector {
+      button {
+        color: #3f4954;
+        font-size: 15px;
+        border: none;
+        padding: .5rem;
+        background-color: #737a7f;
+        &.active {
+          background-color: white;
+        }
+      }
+
+      .weekly-mode {
+        border-top-left-radius: .5rem;
+        border-bottom-left-radius: .5rem;
+        margin-right: 0;
+        padding-left: .75rem;
+      }
+      .daily-mode {
+        border-top-right-radius: .5rem;
+        border-bottom-right-radius: .5rem;
+        margin-left: 0;
+        padding-right: .75rem;
+      }
+    }
+  }
 }
+

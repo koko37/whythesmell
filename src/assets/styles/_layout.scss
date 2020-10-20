@@ -3,13 +3,29 @@ body {
 }
 
 header {
-  padding: 32px;
+  padding: 2rem;
   .nav-result {
     color: white;
     font-size: 18px;
   }
 }
 
+.title {
+  margin-top: 1rem;
+  margin-bottom: 0px;
+  h1 {
+    font-size: 45px;
+    margin-bottom: 0px;
+  }
+}
+
 button, button:focus{
   outline: none;
+}
+
+button.navigate {
+  border: none;
+  background-color: transparent;
+  padding-left: .75rem;
+  padding-right: .75rem;
 }
