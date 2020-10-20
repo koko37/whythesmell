@@ -1,8 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { setCurrentDate } from '../actions/dateActions'
+import Loader from 'react-loader-spinner'
 import Calendar from 'react-calendar'
+
+import { setCurrentDate } from '../actions/dateActions'
+import { queryDataByTimestamp } from '../utils/firebase'
 
 import 'react-calendar/dist/Calendar.css'
 import imgRightArrow from '../assets/imgs/lt.png'
@@ -19,17 +22,44 @@ const DAILY_CALENDAR = 4;
 const mapStateToProps = (state) => ({
   weekStart: state.date.weekStart,
   weekEnd: state.date.weekEnd,
-  currentDate: state.date.currentDate
+  currentDate: state.date.currentDate,
+  dateStart: state.date.dateStart,
+  dateEnd: state.date.dateEnd,
 })
 
 const mapDispatchToProps = (dispatch) => ({
   setDate: (dt) => dispatch(setCurrentDate(dt))
 })
 
-const GraphResult = ({currentDate, weekStart, weekEnd, setDate}) => {
+const GraphResult = ({currentDate, weekStart, weekEnd, dateStart, dateEnd, setDate}) => {
   const [displayMode, setDisplayMode] = useState(DISPLAY_WEEKLY)
   const [showCalendar, setShowCalendar] = useState(false)
   const [calendarMode, setCalendarMode] = useState('month')
+  const [loading, setLoading] = useState(false)
+  const [connError, setConError] = useState(false)
+
+  useEffect(() => {
+    console.log("query data start ...")
+    setLoading(true)
+
+    let beginDate = displayMode === DISPLAY_WEEKLY ? weekStart : dateStart
+    let endDate = displayMode === DISPLAY_WEEKLY ? weekEnd : dateEnd
+    queryDataByTimestamp(
+      process.env.REACT_APP_COLLECTION_NAME,
+      beginDate.valueOf(),
+      endDate.valueOf(),
+      (results) => {
+        setLoading(false)
+        if (results === null) {
+          setConError(true)
+          return
+        }
+        console.log("loaded data from firestore")
+        results.forEach((item) => {
+          console.log(item.id, item.data().value, item.data().flag)
+        })
+      })
+  }, [currentDate, dateStart, dateEnd, weekStart, weekEnd, displayMode])
 
   /**
    * Display mode
@@ -122,15 +152,33 @@ const GraphResult = ({currentDate, weekStart, weekEnd, setDate}) => {
     } 
     return `Week: ${weekStart.getDate()} - ${weekEnd.getDate()}`
   }
-
+  
   return (
     <div className="graph-result">
       <header className="d-flex flex-row justify-content-start align-items-center">
         <Link to="/" className="nav-result d-flex align-items-center"><img src={imgRightArrow} alt="arrow" />&nbsp;Back to entering data</Link>
       </header>
 
-      <div className="title w-100 text-center">
+      <div className="title w-100 d-flex justify-content-center align-items-center">
         <h1 className="text-white"><span className="hint">WhyTheSmell</span> Results</h1>
+        {
+          loading && (
+          <Loader
+            type="Oval"
+            color="#FFF"
+            height={32}
+            width={32}
+            className="spinner"
+          />
+          )
+        }
+        {
+          connError && (
+            <h3 className="error">
+              Error
+            </h3>
+          )
+        }
       </div>
 
       <div className="graph-wrapper d-flex align-items-stretch justify-content-center">
