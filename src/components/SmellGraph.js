@@ -19,10 +19,8 @@ const SmellGraph = ({peeData, pooData, smellData, startDate, endDate, graphMode}
 
     if (graphMode === DISPLAY_WEEKLY) {
       xLabelsTemp = get7DaysXaxisLabel(startDate, endDate)
-      console.log('x label count 2:', xLabelsTemp.length)
     } else {
       xLabelsTemp = get24HoursXaxisLabel(startDate)
-      console.log('x label count:', xLabelsTemp.length)
     }
     for(i=0; i<xLabelsTemp.length; i++) {
       peeValuesTemp.push(0)

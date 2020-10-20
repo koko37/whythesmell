@@ -75,24 +75,20 @@ const GraphResult = ({currentDate, weekStart, weekEnd, dateStart, dateEnd, setDa
    * Calendar related methods
    */
   const onOpenCalendar = (calendarMode) => {
-    console.log("calendarMode", calendarMode);
     if(calendarMode === MONTHLY_CALENDAR) {
       setCalendarMode('year')
     } else {
       setCalendarMode('month')
     }
-
     setShowCalendar(true)
   }
 
   const onDateChanged = (v, e) => {
-    console.log("dateChanged", v)
     setShowCalendar(false)
     setDate(v)
   }
 
   const onMonthChanged = (v, e) => {
-    console.log("monthChanged", v)
     setShowCalendar(false)
     setDate(v)
   }
@@ -100,7 +96,6 @@ const GraphResult = ({currentDate, weekStart, weekEnd, dateStart, dateEnd, setDa
    * Navigation Event Handlers
    */
   const onPrevMonth = () => {
-    console.log("move to previous month");
     let dateTemp = new Date(currentDate)
     dateTemp.setMonth(dateTemp.getMonth() - 1)
     setDate(dateTemp)
