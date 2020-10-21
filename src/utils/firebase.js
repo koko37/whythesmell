@@ -61,3 +61,21 @@ export function queryDataByTimestamp(collectionName, startTs, endTs, callback) {
       callback(null)
     })
 }
+
+/**
+ * delete date from firestore between timestamp
+ */
+export function deleteDataByTimestamp(collectionName, startTs, endTs, callback) {
+  let db = firebase.firestore()
+  db
+    .collection(collectionName)
+    .where('createdAt', '>=', startTs)
+    .where('createdAt', '<=', endTs)
+    .get()
+    .then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        doc.ref.delete()
+      })
+      callback()
+    })
+}

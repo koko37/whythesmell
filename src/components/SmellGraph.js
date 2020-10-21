@@ -3,7 +3,7 @@ import { Bar } from 'react-chartjs-2'
 import { DISPLAY_WEEKLY, DISPLAY_DAILY } from '../utils/constants'
 import { getWeekDayTwo } from '../utils/utils'
 
-const SmellGraph = ({peeData, pooData, smellData, startDate, endDate, graphMode}) => {
+const SmellGraph = ({peeData, pooData, smellData, startDate, endDate, graphMode, onSelectedItem}) => {
   const [xLabels, setXlabels] = useState([])
   const [peeValues, setPeeValues] = useState([])
   const [pooValues, setPooValues] = useState([])
@@ -44,17 +44,12 @@ const SmellGraph = ({peeData, pooData, smellData, startDate, endDate, graphMode}
     setPeeValues(peeValuesTemp)
     setPooValues(pooValuesTemp)
     setSmellValues(smellValuesTemp)
-
   }, [graphMode, startDate, endDate, peeData, pooData, smellData])
 
   /**
    * generate y values
    */
   const getYvalues = (beDate, enDate, originalData, holdArray) => {
-    // console.log("start date:", beDate.toLocaleString())
-    // console.log("end date:", enDate.toLocaleString())
-    // console.log("holdArray:", holdArray.length)
-
     const startTimestamp = beDate.valueOf()
     const endTimestamp = enDate.valueOf()
     const dts = (endTimestamp - startTimestamp) / holdArray.length
@@ -70,17 +65,25 @@ const SmellGraph = ({peeData, pooData, smellData, startDate, endDate, graphMode}
    */
   const get24HoursXaxisLabel = (beDate) => {
     const xNewLabel = []
+    let tempDate = new Date(beDate)
     let i
+
     xNewLabel.push([`${beDate.getDate()}`, `${getWeekDayTwo(beDate)}`])
     for(i=1; i<12; i++) {
+      tempDate.setHours(i, 0, 0)
+
       if (i%2 ===1) {
         xNewLabel.push('')
       } else {
         xNewLabel.push(`${i}am`)
       }
     }
+    tempDate.setHours(12, 0, 0)
     xNewLabel.push('12pm')
+
     for(i=1; i<12; i++) {
+      tempDate.setHours(12 + i, 0, 0)
+
       if (i%2 ===1) {
         xNewLabel.push('')
       } else {
@@ -97,15 +100,17 @@ const SmellGraph = ({peeData, pooData, smellData, startDate, endDate, graphMode}
     const xNewLabel = []
     let tempDate = new Date(beDate)
     let i
+
     while(tempDate <= enDate) {
       xNewLabel.push([`${tempDate.getDate()}`, `${getWeekDayTwo(tempDate)}`])
+
       for (i=1; i<24; i++) {
         xNewLabel.push('')
       }
+      tempDate.setHours(0, 0, 0)
       tempDate.setDate(tempDate.getDate()+1)
     }
     xNewLabel.push([`${tempDate.getDate()}`, `${getWeekDayTwo(tempDate)}`])
-
     return xNewLabel
   }
 
@@ -151,17 +156,29 @@ const SmellGraph = ({peeData, pooData, smellData, startDate, endDate, graphMode}
         ]
       }}
       options={{
+        onClick: (evt, e) => {
+          if (e.length > 0) {
+            const selectedIndex = e[0]._index
+            if ( peeValues[selectedIndex] + pooValues[selectedIndex] + smellValues[selectedIndex] >0 ) {
+              const tempDate = new Date(startDate)
+              tempDate.setHours(tempDate.getHours() + selectedIndex)
+              onSelectedItem(true, tempDate)
+              return;
+            }
+          }
+          onSelectedItem(false)
+        },
         responsive: true,
         tooltips: {
           mode: 'label'
         },
         elements: {
           line: {
-            tension: 0,
+            tension: 0.2,
             fill: false,
           },
           point: {
-            radius: 0
+            radius: 3
           }
         },
         legend: {

@@ -6,7 +6,7 @@ import Calendar from 'react-calendar'
 import SmellGraph from '../components/SmellGraph'
 
 import { setCurrentDate } from '../actions/dateActions'
-import { queryDataByTimestamp } from '../utils/firebase'
+import { queryDataByTimestamp, deleteDataByTimestamp } from '../utils/firebase'
 import { DISPLAY_WEEKLY, DISPLAY_DAILY, MONTHLY_CALENDAR, DAILY_CALENDAR } from '../utils/constants'
 
 import 'react-calendar/dist/Calendar.css'
@@ -34,12 +34,23 @@ const GraphResult = ({currentDate, weekStart, weekEnd, dateStart, dateEnd, setDa
   const [calendarMode, setCalendarMode] = useState('month')
   const [loading, setLoading] = useState(false)
   const [connError, setConError] = useState(false)
-  
+  const [showDeleteButton, setShowDeleteButton] = useState(false)
+  const [selectedTs, setSelectedTs] = useState(null)
+
   const [peeData, setPeeData] = useState([])
   const [pooData, setPooData] = useState([])
   const [smellData, setSmellData] = useState([])
 
-  useEffect(() => {
+  const onGraphItemSelected = (visibleDelete, selectedTime=null) => {
+    setShowDeleteButton(visibleDelete)
+    if (selectedTime) {
+      const selectedTemp = new Date(selectedTime)
+      selectedTemp.setMinutes(selectedTemp.getMinutes()-30)
+      setSelectedTs(selectedTemp)
+    }
+  }
+
+  const refreshGraphData = () => {
     setLoading(true)
 
     let beginDate = displayMode === DISPLAY_WEEKLY ? weekStart : dateStart
@@ -58,6 +69,26 @@ const GraphResult = ({currentDate, weekStart, weekEnd, dateStart, dateEnd, setDa
         setPooData(results.filter((item) => item.flag === 'poo'))
         setSmellData(results.filter((item) => item.flag === 'smell'))
       })
+  }
+
+  const onClickDeleteButton = () => {
+    if(!window.confirm('Are you sure to delete the data?')) return
+
+    const endTs = new Date(selectedTs)
+    endTs.setHours(endTs.getHours()+1)
+
+    deleteDataByTimestamp(process.env.REACT_APP_COLLECTION_NAME,
+      selectedTs.valueOf(),
+      endTs.valueOf(),
+      () => {
+        setShowDeleteButton(false)
+        // re-load data
+        refreshGraphData()
+      })
+  }
+
+  useEffect(() => {
+    refreshGraphData()
   }, [currentDate, dateStart, dateEnd, weekStart, weekEnd, displayMode])
 
   /**
@@ -186,10 +217,12 @@ const GraphResult = ({currentDate, weekStart, weekEnd, dateStart, dateEnd, setDa
             startDate={displayMode === DISPLAY_WEEKLY ? weekStart : dateStart}
             endDate={displayMode === DISPLAY_WEEKLY ? weekEnd : dateEnd}
             graphMode={displayMode}
+            onSelectedItem={onGraphItemSelected}
           />
         </div>
 
         <div className="graph-legend-wrapper d-flex flex-column justify-content-around align-items-start">
+          <button className={`btn btn-danger ${!showDeleteButton && 'd-none'}`} onClick={onClickDeleteButton}>Delete</button>
           <div className="graph-legend graph-legend__smell">Smell</div>
           <div className="graph-legend graph-legend__pee">Pee</div>
           <div className="graph-legend graph-legend__poo">Poo</div>
