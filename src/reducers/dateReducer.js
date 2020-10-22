@@ -1,3 +1,4 @@
+import { REHYDRATE } from 'redux-persist'
 import { getFirstDayOfWeek, getEndDayOfWeek, getStartOfDay, getEndOfDay} from '../utils/utils'
 import { SET_CURRENT_DATE } from '../actions/dateActions'
 
@@ -11,6 +12,16 @@ export const initialState = {
 
 export default function dateReducer(state = initialState, action) {
   switch(action.type) {
+    case REHYDRATE:
+      const loadedData = new Date(action.payload.date.currentDate)
+      return {
+        ...state,
+        currentDate: loadedData,
+        weekStart: getFirstDayOfWeek(loadedData),
+        weekEnd: getEndDayOfWeek(loadedData),
+        dateStart: getStartOfDay(loadedData),
+        dateEnd: getEndOfDay(loadedData),
+      }
     case SET_CURRENT_DATE:
       return {
         ...state,
