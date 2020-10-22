@@ -45,7 +45,11 @@ const GraphResult = ({currentDate, weekStart, weekEnd, dateStart, dateEnd, setDa
     setShowDeleteButton(visibleDelete)
     if (selectedTime) {
       const selectedTemp = new Date(selectedTime)
-      selectedTemp.setMinutes(selectedTemp.getMinutes()-30)
+      if (displayMode === DISPLAY_DAILY) {
+        selectedTemp.setMinutes(selectedTemp.getMinutes()-60)
+      } else {
+        selectedTemp.setMinutes(selectedTemp.getMinutes()-120)
+      }
       setSelectedTs(selectedTemp)
     }
   }
@@ -65,6 +69,9 @@ const GraphResult = ({currentDate, weekStart, weekEnd, dateStart, dateEnd, setDa
           setConError(true)
           return
         }
+        results.forEach(result => {
+          console.log(result.createdAt, "  ", result.flag, result.value);
+        })
         setPeeData(results.filter((item) => item.flag === 'pee'))
         setPooData(results.filter((item) => item.flag === 'poo'))
         setSmellData(results.filter((item) => item.flag === 'smell'))
@@ -75,8 +82,13 @@ const GraphResult = ({currentDate, weekStart, weekEnd, dateStart, dateEnd, setDa
     if(!window.confirm('Are you sure to delete the data?')) return
 
     const endTs = new Date(selectedTs)
-    endTs.setHours(endTs.getHours()+1)
+    if (displayMode === DISPLAY_DAILY) {
+      endTs.setHours(endTs.getHours()+2)
+    } else {
+      endTs.setHours(endTs.getHours()+4)
+    }
 
+    console.log(selectedTs.valueOf(), "~", endTs.valueOf())
     deleteDataByTimestamp(process.env.REACT_APP_COLLECTION_NAME,
       selectedTs.valueOf(),
       endTs.valueOf(),
